@@ -2388,7 +2388,7 @@ svg {
     background: rgba(15, 23, 42, 0.75) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     color: #ffffff !important;
-    z-index: 10001 !important;
+    z-index: 11200 !important; /* Higher than modal viewport */
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
   }
 
@@ -2423,6 +2423,43 @@ svg {
     width: 260px !important; /* Keep width for smooth transition */
     padding: 20px !important;
     border-right: none !important;
+  }
+
+  .btn-close-sidebar-mobile {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-primary) !important;
+    width: 32px !important;
+    height: 32px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+  }
+
+  .btn-close-sidebar-mobile svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .sidebar-backdrop-mobile {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(15, 23, 42, 0.5) !important;
+    backdrop-filter: blur(2px) !important;
+    z-index: 9999 !important; /* Behind the sidebar (which is 10000) */
+    animation: fadeIn 0.25s ease-out !important;
+  }
+
+  /* Force preview modals and all modals on top of the sidebar */
+  .modal-backdrop, .drawer-backdrop {
+    z-index: 11000 !important; /* Above sidebar */
+  }
+
+  .preview-drawer-content {
+    z-index: 11100 !important; /* Above modal backdrop */
   }
 
   /* Main content fills screen behind overlay sidebar */
@@ -2507,6 +2544,15 @@ svg {
 .preview-drawer-right .drawer-header {
   padding-right: 50px;
 }
+
+.btn-close-sidebar-mobile {
+  display: none !important;
+}
+
+.sidebar-backdrop-mobile {
+  display: none;
+}
+
 
 
 

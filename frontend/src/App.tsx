@@ -1213,11 +1213,19 @@ function App() {
         </div>
       ) : (
         <div className="workspace-layout">
+          {/* Mobile Sidebar Backdrop */}
+          {sidebarOpen && (
+            <div className="sidebar-backdrop-mobile" onClick={() => setSidebarOpen(false)}></div>
+          )}
+
           {/* Sidebar */}
           <aside className={`sidebar ${sidebarOpen ? '' : 'collapsed'}`}>
-            <div className="sidebar-header">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="logo-svg" style={{ marginRight: '10px', color: 'var(--accent-color)' }}><path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42-3.1-2.74-5.5-6-5.5A5.5 5.5 0 0 0 4.5 11c-2.5 0-4.5 2-4.5 4.5A3.5 3.5 0 0 0 3.5 19z"></path></svg>
-              <h3>CloudDocs</h3>
+            <div className="sidebar-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="logo-svg" style={{ marginRight: '10px', color: 'var(--accent-color)' }}><path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42-3.1-2.74-5.5-6-5.5A5.5 5.5 0 0 0 4.5 11c-2.5 0-4.5 2-4.5 4.5A3.5 3.5 0 0 0 3.5 19z"></path></svg>
+                <h3>CloudDocs</h3>
+              </div>
+              <button className="btn-close-sidebar-mobile" onClick={() => setSidebarOpen(false)} title="Đóng Menu">{I.x}</button>
             </div>
 
             <nav className="sidebar-nav">
