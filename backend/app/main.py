@@ -147,17 +147,22 @@ allow_credentials: True nếu dùng cookies (chúng ta dùng JWT nên False)
 """
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",  # Vite dev server (mặc định)
-        "http://localhost:3000",  # React dev server (alternative)
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:3000",
-        # Thêm Vercel/Netlify URL khi deploy production
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],   # GET, POST, PUT, DELETE, OPTIONS, PATCH
     allow_headers=["*"],   # Authorization, Content-Type, v.v.
 )
+
+from fastapi.responses import JSONResponse
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    import traceback
+    traceback.print_exc()
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Internal Server Error: {str(exc)}"}
+    )
 
 
 # ── Register Routers ──────────────────────────────────────────────────────────
