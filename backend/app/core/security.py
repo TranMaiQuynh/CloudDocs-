@@ -171,21 +171,16 @@ def create_access_token(
     now = datetime.now(timezone.utc)
     expire = now + expires_delta
 
+    role_str = role.value if hasattr(role, "value") else str(role)
+
     payload = {
-        "sub": user_id,        # Subject: user ID (required by JWT standard)
-        "role": role,           # Custom claim: role cho RBAC
-        "email": email,         # Custom claim: email cho logging
-        "exp": expire,          # Expiry: jose tự convert datetime → Unix timestamp
-        "iat": now,             # Issued At: khi nào token được tạo
+        "sub": str(user_id),
+        "role": role_str,
+        "email": str(email),
+        "exp": int(expire.timestamp()),
+        "iat": int(now.timestamp()),
     }
 
-    """
-    jwt.encode() ký payload bằng secret key + thuật toán HS256.
-    Kết quả là chuỗi: "<header_b64>.<payload_b64>.<signature>"
-    
-    settings.JWT_SECRET_KEY phải là chuỗi ngẫu nhiên dài, bí mật.
-    Nếu bị lộ, attacker có thể tạo token giả với bất kỳ role nào!
-    """
     secret_key = settings.JWT_SECRET_KEY or "clouddocs_default_jwt_secret_key_2026_super_secure"
     encoded_jwt = jwt.encode(payload, secret_key, algorithm=ALGORITHM)
     return encoded_jwt
@@ -217,13 +212,12 @@ def create_refresh_token(
     expire = now + expires_delta
 
     payload = {
-        "sub": user_id,
+        "sub": str(user_id),
         "type": "refresh",
-        "exp": expire,
-        "iat": now,
+        "exp": int(expire.timestamp()),
+        "iat": int(now.timestamp()),
     }
 
     secret_key = settings.JWT_SECRET_KEY or "clouddocs_default_jwt_secret_key_2026_super_secure"
     encoded_jwt = jwt.encode(payload, secret_key, algorithm=ALGORITHM)
     return encoded_jwt
-
