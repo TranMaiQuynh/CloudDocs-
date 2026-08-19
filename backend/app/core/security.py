@@ -84,21 +84,25 @@ REFRESH_TOKEN_EXPIRE_DAYS = settings.REFRESH_TOKEN_EXPIRE_DAYS
 # PASSWORD FUNCTIONS
 # ============================================================
 
+import bcrypt
+
 def hash_password(plain_password: str) -> str:
     """
-    Hash password bằng bcrypt (giới hạn 72 chars cho bcrypt).
+    Hash password bằng bcrypt.
     """
-    safe_pass = plain_password[:72] if plain_password else ""
-    return pwd_context.hash(safe_pass)
+    pwd_bytes = plain_password.encode('utf-8')[:72]
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(pwd_bytes, salt).decode('utf-8')
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Kiểm tra password có khớp với hash không.
     """
-    safe_pass = plain_password[:72] if plain_password else ""
     try:
-        return pwd_context.verify(safe_pass, hashed_password)
+        pwd_bytes = plain_password.encode('utf-8')[:72]
+        hash_bytes = hashed_password.encode('utf-8')
+        return bcrypt.checkpw(pwd_bytes, hash_bytes)
     except Exception:
         return False
 
