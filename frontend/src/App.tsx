@@ -2353,6 +2353,25 @@ function App() {
                         <img src={previewDoc.presignedUrl} alt="Preview" />
                       </div>
                     ) : (
+                      previewDoc.doc.mime_type.includes('word') ||
+                      previewDoc.doc.mime_type.includes('document') ||
+                      previewDoc.doc.mime_type.includes('spreadsheet') ||
+                      previewDoc.doc.mime_type.includes('presentation') ||
+                      previewDoc.doc.mime_type.includes('excel') ||
+                      previewDoc.doc.mime_type.includes('msword') ||
+                      previewDoc.doc.name.endsWith('.docx') ||
+                      previewDoc.doc.name.endsWith('.doc') ||
+                      previewDoc.doc.name.endsWith('.xlsx') ||
+                      previewDoc.doc.name.endsWith('.pptx')
+                    ) ? (
+                      <iframe
+                        src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(previewDoc.presignedUrl)}`}
+                        width="100%"
+                        height="100%"
+                        title="Office Document Preview"
+                        style={{ border: 'none', borderRadius: '12px' }}
+                      ></iframe>
+                    ) : (
                       <div className="generic-preview">
                         <span className="preview-file-icon">{I.file}</span>
                         <h4>Định dạng file không hỗ trợ xem trước trên web</h4>
