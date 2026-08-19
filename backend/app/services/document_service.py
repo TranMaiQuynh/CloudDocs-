@@ -7,7 +7,9 @@ Mô tả:
     Hỗ trợ Versioning và cơ chế Xóa mềm/Khôi phục/Xóa cứng tích hợp phân quyền ACL đệ quy.
 """
 
+import re
 import uuid
+import unicodedata
 from typing import List, Optional, Tuple
 from datetime import datetime, timezone
 from bson import ObjectId
@@ -19,6 +21,22 @@ from app.services.permission_service import check_user_access, AccessLevel
 from app.database.connection import database
 
 users_collection = database["users"]
+
+
+def sanitize_filename(filename: str) -> str:
+    """Chuyển tên file vật lý sang chuẩn ASCII safe cho Cloud Storage mà vẫn giữ nguyên extension."""
+    if not filename:
+        return "file"
+    if "." in filename:
+        name_part, ext = filename.rsplit(".", 1)
+        ext = f".{ext.lower()}"
+    else:
+        name_part, ext = filename, ""
+
+    name_part = unicodedata.normalize('NFKD', name_part).encode('ASCII', 'ignore').decode('utf-8')
+    safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', name_part)
+    safe_name = re.sub(r'_+', '_', safe_name).strip('_')
+    return f"{safe_name or 'file'}{ext}"
 
 
 async def upload_document(
@@ -76,7 +94,8 @@ async def upload_document(
 
     # 3. Tạo đường dẫn lưu trữ độc nhất trên Cloud Storage
     folder_path = f"folders/{folder_id}" if folder_id else "root"
-    unique_filename = f"{uuid.uuid4()}-{file.filename}"
+    safe_filename = sanitize_filename(file.filename)
+    unique_filename = f"{uuid.uuid4()}-{safe_filename}"
     storage_path = f"{folder_path}/{unique_filename}"
 
     # 4. Upload lên Supabase Storage qua helper
@@ -184,7 +203,8 @@ async def upload_new_version(
     # 3. Tạo version mới
     new_version_number = doc.get("current_version", 1) + 1
     folder_id = str(doc["folder_id"]) if doc.get("folder_id") else "root"
-    storage_path = f"folders/{folder_id}/{uuid.uuid4()}-{file.filename}"
+    safe_filename = sanitize_filename(file.filename)
+    storage_path = f"folders/{folder_id}/{uuid.uuid4()}-{safe_filename}"
 
     # 4. Upload file lên Supabase
     try:
