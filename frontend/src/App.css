@@ -2292,36 +2292,51 @@ svg {
   vertical-align: -3px;
 }
 
-/* Mobile Responsive Preview Drawer */
+/* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
+  /* Make preview drawer full screen and flex-based on mobile */
   .preview-drawer-content {
+    display: flex !important;
     flex-direction: column !important;
-    width: 96% !important;
-    height: 96vh !important;
-    max-height: 96vh !important;
-    border-radius: 16px !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    border: none !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    overflow: hidden !important;
+    background: var(--bg-primary) !important;
   }
 
   .preview-drawer-left {
     flex: unset !important;
-    height: 40vh !important;
-    min-height: 280px !important;
+    height: 42vh !important;
+    min-height: 260px !important;
     border-right: none !important;
     border-bottom: 1px solid var(--border-color) !important;
     padding: 12px 16px !important;
-  }
-
-  .preview-drawer-right {
-    flex: 1 !important;
-    height: 50vh !important;
-    padding: 12px 16px !important;
-    min-height: 0 !important;
     display: flex !important;
     flex-direction: column !important;
   }
 
+  .preview-drawer-right {
+    flex: 1 !important;
+    height: 58vh !important;
+    padding: 12px 16px !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: var(--bg-secondary) !important;
+    box-sizing: border-box !important;
+  }
+
   .preview-header {
-    margin-bottom: 10px !important;
+    margin-bottom: 8px !important;
+    padding-right: 50px !important; /* Space for float button */
   }
 
   .preview-header h2 {
@@ -2334,66 +2349,121 @@ svg {
 
   .comments-timeline {
     flex-grow: 1 !important;
-    max-height: calc(100% - 100px) !important;
+    max-height: calc(100% - 70px) !important;
     margin-bottom: 10px !important;
     overflow-y: auto !important;
+    padding-right: 4px !important;
   }
 
   .comment-input-form {
-    padding-top: 10px !important;
+    padding: 8px 0 !important;
+    margin-top: auto !important;
+    border-top: 1px solid var(--border-color) !important;
+    background: transparent !important;
+    display: flex !important;
+    gap: 8px !important;
   }
 
   .comment-input-form input {
+    height: 38px !important;
     padding: 8px 12px !important;
     font-size: 13px !important;
+    flex-grow: 1 !important;
   }
 
   .comment-input-form button {
-    padding: 8px 16px !important;
+    height: 38px !important;
+    padding: 0 16px !important;
     font-size: 13px !important;
-  }
-
-  /* Add spacing for absolute close button */
-  .preview-header {
-    padding-right: 50px !important;
-  }
-
-  /* Make preview drawer full screen on mobile */
-  .preview-drawer-content {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    max-height: 100vh !important;
-    border-radius: 0 !important;
-    border: none !important;
-    margin: 0 !important;
-    z-index: 9999 !important;
   }
 
   /* Dark circular close button floating on mobile */
   .btn-close-drawer-absolute {
     position: fixed !important;
-    top: 16px !important;
-    right: 16px !important;
-    width: 40px !important;
-    height: 40px !important;
+    top: 12px !important;
+    right: 12px !important;
+    width: 36px !important;
+    height: 36px !important;
     border-radius: 50% !important;
     background: rgba(15, 23, 42, 0.75) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     color: #ffffff !important;
     z-index: 10001 !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
   }
 
-  /* Sidebar clipping scroll fix on mobile */
+  /* Sidebar clipping scroll fix & absolute sliding overlay on mobile */
   .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 260px !important;
     height: 100vh !important;
     max-height: 100vh !important;
+    z-index: 10000 !important;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.15) !important;
+    background: var(--sidebar-bg) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
     overflow-y: auto !important;
     padding-bottom: 80px !important; /* Spacing so profile card is not cut off */
-    box-sizing: border-box !important;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease !important;
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  .sidebar.collapsed {
+    transform: translateX(-100%) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 260px !important; /* Keep width for smooth transition */
+    padding: 20px !important;
+    border-right: none !important;
+  }
+
+  /* Main content fills screen behind overlay sidebar */
+  .main-content {
+    width: 100% !important;
+    flex-grow: 1 !important;
+  }
+
+  /* Quota Widget wrapping fixes */
+  .quota-widget {
+    margin-top: auto !important;
+    margin-bottom: 16px !important;
+    padding: 12px !important;
+  }
+
+  .quota-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    font-size: 11px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Prevent role badge and info from wrapping awkwardly */
+  .user-profile-section {
+    padding: 12px !important;
+    gap: 8px !important;
+  }
+
+  .user-info h4 {
+    font-size: 13px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .user-info p {
+    font-size: 11px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 }
 
@@ -2437,6 +2507,7 @@ svg {
 .preview-drawer-right .drawer-header {
   padding-right: 50px;
 }
+
 
 
 
