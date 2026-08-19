@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     MONGODB_URI: str
     DATABASE_NAME: str = "clouddocs"
-    JWT_SECRET_KEY: str = ""
+    JWT_SECRET_KEY: str = "clouddocs_default_jwt_secret_key_2026_super_secure"
     SUPABASE_URL: str = ""
     SUPABASE_KEY: str = ""
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15 # access token có thời hạn 15 phút

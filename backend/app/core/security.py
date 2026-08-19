@@ -186,44 +186,20 @@ def create_access_token(
     settings.JWT_SECRET_KEY phải là chuỗi ngẫu nhiên dài, bí mật.
     Nếu bị lộ, attacker có thể tạo token giả với bất kỳ role nào!
     """
-    encoded_jwt = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=ALGORITHM)
+    secret_key = settings.JWT_SECRET_KEY or "clouddocs_default_jwt_secret_key_2026_super_secure"
+    encoded_jwt = jwt.encode(payload, secret_key, algorithm=ALGORITHM)
     return encoded_jwt
 
 
 def decode_access_token(token: str) -> Optional[dict]:
     """
     Giải mã và verify JWT token từ request header.
-
-    Quá trình verify:
-    1. Tách token thành 3 phần (header, payload, signature)
-    2. Dùng secret key và ALGORITHM để verify signature
-    3. Kiểm tra exp chưa hết hạn
-    4. Nếu ok → trả payload dict; Nếu fail → trả None
-
-    Tại sao trả None thay vì raise Exception?
-    - Để caller (dependencies/auth_deps.py) quyết định cách handle lỗi
-    - Tách biệt "decode logic" và "HTTP error handling"
-
-    Args:
-        token: JWT string từ Authorization header
-
-    Returns:
-        dict | None: Payload dict nếu valid, None nếu invalid/expired
-
-    Ví dụ payload trả về:
-        {
-            "sub": "64f1a2b3c4d5e6f7a8b9c0d1",
-            "role": "member",
-            "email": "student@university.edu.vn",
-            "exp": 1700000000,
-            "iat": 1699996400
-        }
     """
     try:
-        payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=[ALGORITHM])
+        secret_key = settings.JWT_SECRET_KEY or "clouddocs_default_jwt_secret_key_2026_super_secure"
+        payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
         return payload
     except JWTError:
-        # JWTError bao gồm: token invalid, signature mismatch, token expired
         return None
 
 
@@ -233,9 +209,6 @@ def create_refresh_token(
 ) -> str:
     """
     Tạo JWT refresh token sau khi user login thành công.
-
-    Refresh token có thời gian sống lâu hơn (mặc định 7 ngày)
-    và chỉ chứa tối thiểu payload để đảm bảo an toàn.
     """
     if expires_delta is None:
         expires_delta = timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
@@ -245,11 +218,12 @@ def create_refresh_token(
 
     payload = {
         "sub": user_id,
-        "type": "refresh",  # Phân biệt rõ loại token
+        "type": "refresh",
         "exp": expire,
         "iat": now,
     }
 
-    encoded_jwt = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=ALGORITHM)
+    secret_key = settings.JWT_SECRET_KEY or "clouddocs_default_jwt_secret_key_2026_super_secure"
+    encoded_jwt = jwt.encode(payload, secret_key, algorithm=ALGORITHM)
     return encoded_jwt
 
