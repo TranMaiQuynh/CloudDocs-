@@ -1,0 +1,29 @@
+name: clouddocs
+
+services:
+  backend:
+    image: clouddocs-backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: clouddocs_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+
+  frontend:
+    image: clouddocs-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: clouddocs_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
