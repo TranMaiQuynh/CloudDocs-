@@ -2334,9 +2334,12 @@ function App() {
             <div className="modal-backdrop" onClick={() => setPreviewDoc(null)}>
               <div className="preview-drawer-content glass-card" onClick={(e) => e.stopPropagation()}>
                 <div className="preview-drawer-left">
-                  <div className="preview-header">
-                    <h2>{I.eye} Xem trước tài liệu</h2>
-                    <span className="file-preview-name">{previewDoc.doc.name}</span>
+                  <div className="preview-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%' }}>
+                    <div>
+                      <h2>{I.eye} Xem trước tài liệu</h2>
+                      <span className="file-preview-name">{previewDoc.doc.name}</span>
+                    </div>
+                    <button className="btn-close-drawer left-pane-close" onClick={() => setPreviewDoc(null)}>{I.x}</button>
                   </div>
 
                   <div className="preview-viewport">
@@ -2352,6 +2355,12 @@ function App() {
                       <div className="image-preview-container">
                         <img src={previewDoc.presignedUrl} alt="Preview" />
                       </div>
+                    ) : previewDoc.doc.mime_type.startsWith('video/') ? (
+                      <video
+                        src={previewDoc.presignedUrl}
+                        controls
+                        style={{ width: '100%', height: '100%', borderRadius: '12px' }}
+                      />
                     ) : (
                       previewDoc.doc.mime_type.includes('word') ||
                       previewDoc.doc.mime_type.includes('document') ||

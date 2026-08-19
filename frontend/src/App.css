@@ -2291,3 +2291,86 @@ svg {
   margin-right: 8px;
   vertical-align: -3px;
 }
+
+/* Mobile Responsive Preview Drawer */
+@media (max-width: 768px) {
+  .preview-drawer-content {
+    flex-direction: column !important;
+    width: 96% !important;
+    height: 96vh !important;
+    max-height: 96vh !important;
+    border-radius: 16px !important;
+  }
+
+  .preview-drawer-left {
+    flex: unset !important;
+    height: 40vh !important;
+    min-height: 280px !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 12px 16px !important;
+  }
+
+  .preview-drawer-right {
+    flex: 1 !important;
+    height: 50vh !important;
+    padding: 12px 16px !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .preview-header {
+    margin-bottom: 10px !important;
+  }
+
+  .preview-header h2 {
+    font-size: 16px !important;
+  }
+
+  .preview-viewport {
+    height: calc(100% - 40px) !important;
+  }
+
+  .comments-timeline {
+    flex-grow: 1 !important;
+    max-height: calc(100% - 100px) !important;
+    margin-bottom: 10px !important;
+    overflow-y: auto !important;
+  }
+
+  .comment-input-form {
+    padding-top: 10px !important;
+  }
+
+  .comment-input-form input {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+  }
+
+  .comment-input-form button {
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+  }
+
+  /* Make sure the close button is highly visible and styled */
+  .btn-close-drawer {
+    font-size: 22px !important;
+    padding: 4px 8px !important;
+    color: var(--text-primary) !important;
+  }
+
+  .left-pane-close {
+    display: block !important;
+  }
+
+  .preview-drawer-right .btn-close-drawer {
+    display: none !important;
+  }
+}
+
+.left-pane-close {
+  display: none !important;
+}
+
+
