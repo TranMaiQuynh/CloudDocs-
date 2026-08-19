@@ -2333,13 +2333,11 @@ function App() {
           {previewDoc && (
             <div className="modal-backdrop" onClick={() => setPreviewDoc(null)}>
               <div className="preview-drawer-content glass-card" onClick={(e) => e.stopPropagation()}>
+                <button className="btn-close-drawer-absolute" onClick={() => setPreviewDoc(null)} title="Đóng">{I.x}</button>
                 <div className="preview-drawer-left">
-                  <div className="preview-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%' }}>
-                    <div>
-                      <h2>{I.eye} Xem trước tài liệu</h2>
-                      <span className="file-preview-name">{previewDoc.doc.name}</span>
-                    </div>
-                    <button className="btn-close-drawer left-pane-close" onClick={() => setPreviewDoc(null)}>{I.x}</button>
+                  <div className="preview-header">
+                    <h2>{I.eye} Xem trước tài liệu</h2>
+                    <span className="file-preview-name">{previewDoc.doc.name}</span>
                   </div>
 
                   <div className="preview-viewport">
@@ -2396,7 +2394,6 @@ function App() {
                 <div className="preview-drawer-right">
                   <div className="drawer-header">
                     <h3>{I.comment} Bình luận / Ghi chú</h3>
-                    <button className="btn-close-drawer" onClick={() => setPreviewDoc(null)}>{I.x}</button>
                   </div>
 
                   <div className="comments-timeline">

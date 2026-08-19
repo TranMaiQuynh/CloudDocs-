@@ -2353,24 +2353,48 @@ svg {
     font-size: 13px !important;
   }
 
-  /* Make sure the close button is highly visible and styled */
-  .btn-close-drawer {
-    font-size: 22px !important;
-    padding: 4px 8px !important;
-    color: var(--text-primary) !important;
-  }
-
-  .left-pane-close {
-    display: block !important;
-  }
-
-  .preview-drawer-right .btn-close-drawer {
-    display: none !important;
+  /* Add spacing for absolute close button */
+  .preview-header {
+    padding-right: 50px !important;
   }
 }
 
-.left-pane-close {
-  display: none !important;
+.btn-close-drawer-absolute {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all var(--transition-speed);
 }
+
+.btn-close-drawer-absolute:hover {
+  background: var(--accent-color);
+  color: #ffffff;
+  border-color: var(--accent-color);
+  transform: scale(1.08);
+}
+
+.btn-close-drawer-absolute svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+}
+
+/* Ensure desktop comments header doesn't overlap the absolute close button */
+.preview-drawer-right .drawer-header {
+  padding-right: 50px;
+}
+
 
 
