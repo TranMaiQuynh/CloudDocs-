@@ -86,48 +86,21 @@ REFRESH_TOKEN_EXPIRE_DAYS = settings.REFRESH_TOKEN_EXPIRE_DAYS
 
 def hash_password(plain_password: str) -> str:
     """
-    Hash password bằng bcrypt.
-
-    Tại sao không lưu plain_password?
-    - Nếu DB bị hack, attacker không có password thật của users
-    - GDPR / bảo mật pháp lý: phải mã hóa thông tin nhạy cảm
-    - bcrypt tự động thêm salt ngẫu nhiên → mỗi lần hash ra chuỗi khác nhau
-
-    Args:
-        plain_password: Mật khẩu dạng plaintext từ user
-
-    Returns:
-        str: Chuỗi bcrypt hash (ví dụ: "$2b$12$eImiTXuWVx...")
-
-    Ví dụ:
-        hash_password("mypass123") → "$2b$12$abc..."
-        hash_password("mypass123") → "$2b$12$xyz..."  ← KHÁC! Do salt ngẫu nhiên
+    Hash password bằng bcrypt (giới hạn 72 chars cho bcrypt).
     """
-    return pwd_context.hash(plain_password)
+    safe_pass = plain_password[:72] if plain_password else ""
+    return pwd_context.hash(safe_pass)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Kiểm tra password có khớp với hash không.
-
-    Tại sao không hash rồi so sánh?
-    - bcrypt hash có salt ngẫu nhiên embedded trong chuỗi hash
-    - pwd_context.verify() tự extract salt từ hash, rồi hash password với salt đó
-    - Nếu tự hash và so sánh sẽ LUÔN KHÁC vì salt khác nhau
-
-    Args:
-        plain_password:  Mật khẩu user vừa nhập khi login
-        hashed_password: Hash lưu trong DB
-
-    Returns:
-        bool: True nếu password đúng, False nếu sai
-
-    Ví dụ:
-        stored = "$2b$12$abc..."  (hash của "mypass123")
-        verify_password("mypass123", stored) → True
-        verify_password("wrongpass", stored) → False
     """
-    return pwd_context.verify(plain_password, hashed_password)
+    safe_pass = plain_password[:72] if plain_password else ""
+    try:
+        return pwd_context.verify(safe_pass, hashed_password)
+    except Exception:
+        return False
 
 
 # ============================================================
